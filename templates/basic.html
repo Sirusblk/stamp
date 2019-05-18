@@ -1,0 +1,5 @@
+<h1>{{ title }}</h1>
+{% for path in paths %}
+<h3>GET {{ path }}</h3>
+<p>{{ paths[path]['get']['summary'] }}</p>
+{% endfor %}

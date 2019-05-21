@@ -12,19 +12,19 @@
 <h2>Schemas</h2>
 {% if schemas %}
 {%- for schema in schemas %}
-  <h3>{{ schema }}</h3>
-  <table>
-    {%- if schemas[schema]['properties'] %}
-    {% for property in schemas[schema]['properties'] -%}
-    <tr>
-      <td>{{ property }} : {{ schemas[schema]['properties'][property]['type'] }}</td>
-    </tr>
-    {%- endfor -%}
-    {%- elif schemas[schema]['type'] -%}
-    <tr>
-      <td>{{ schemas[schema]['type'] }}</td>
-    </tr>
-    {%- endif -%}
-  </table>
-{% endfor -%}
+<h3>{{ schema }}</h3>
+<table>
+  {% if schemas[schema]['properties'] -%}
+  {% for property in schemas[schema]['properties'] -%}
+  <tr>
+    <td>{{ property }} : {{ schemas[schema]['properties'][property]['type'] }}</td>
+  </tr>
+  {% endfor -%}
+  {% elif schemas[schema]['type'] -%}
+  <tr>
+    <td>{{ schemas[schema]['type'] }}</td>
+  </tr>
+  {%- endif %}
+</table>
+{% endfor %}
 {%- endif -%}

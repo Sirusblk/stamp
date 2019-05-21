@@ -18,14 +18,12 @@ def open_yaml(yaml_file):
 
 def render_html(api_dict, input_jinja, output_path):
     # TODO: Remove this temporary code
-    root = os.path.dirname(os.path.abspath(__file__))
-    templates_dir = os.path.join(root, 'templates')
-    env = Environment( loader = FileSystemLoader(templates_dir) )
-    template = env.get_template('basic.html')
+    env = Environment( loader = FileSystemLoader(input_jinja) )
+    template = env.get_template('template.html')
 
-
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
+    output_dir = os.path.dirname(output_path)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     with open(output_path, 'w+') as output_file:
         output_file.write(template.render(

@@ -1,5 +1,26 @@
 <h1>{{ title }}</h1>
-{% for path in paths %}
-<h3>GET {{ path }}</h3>
-<p>{{ paths[path]['get']['summary'] }}</p>
+
+<h2>Paths</h2>
+{%- for path in paths %}
+{%- for verb in paths[path] %}
+<h3>{{ verb.upper() }} {{ path }}</h3>
+<p>{{ paths[path][verb]['summary'] }}</p>
+{% endfor -%}
 {% endfor %}
+<hr>
+
+<h2>Schemas</h2>
+{% if schemas %}
+{%- for schema in schemas -%}
+  <h3>{{ schema }}</h3>
+  {%- if schemas[schema]['properties'] %}
+  <table>
+    {% for property in schemas[schema]['properties'] -%}
+    <tr>
+      <td>{{ property }} : {{ schemas[schema]['properties'][property]['type'] }}</td>
+    </tr>
+    {%- endfor %}
+  </table>
+  {% endif %}
+{% endfor -%}
+{%- endif -%}

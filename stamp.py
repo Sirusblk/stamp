@@ -16,7 +16,7 @@ def open_yaml(yaml_file):
             print(e)
 
 
-def render_html(yaml_dict, input_jinja, output_path):
+def render_html(api_dict, input_jinja, output_path):
     # TODO: Remove this temporary code
     root = os.path.dirname(os.path.abspath(__file__))
     templates_dir = os.path.join(root, 'templates')
@@ -29,8 +29,9 @@ def render_html(yaml_dict, input_jinja, output_path):
 
     with open(output_path, 'w+') as output_file:
         output_file.write(template.render(
-            title = yaml_dict['info']['title'],
-            paths = yaml_dict['paths']
+            title = api_dict['info']['title'],
+            paths = api_dict['paths'],
+            schemas = api_dict['components']['schemas']
         ))
 
 

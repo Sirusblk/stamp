@@ -1,0 +1,27 @@
+{% if schemas %}
+{%- for schema in schemas %}
+<h3><a id="{{ schema }}" href="#{{ schema }}">{{ schema }}</a></h3>
+<table class="table table-dark table-striped">
+  {% if schemas[schema]['properties'] -%}
+  {% for property in schemas[schema]['properties'] -%}
+  <tr>
+    <td style="width:25%" scope="col">{{ property }}</td>
+    <td>
+      {{ schemas[schema]['properties'][property]['type'] }}
+      {% if schemas[schema]['properties'][property]['format'] %}
+        <code>(${{ schemas[schema]['properties'][property]['format'] }})</code>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor -%}
+  {% elif schemas[schema]['type'] -%}
+  <tr>
+    <td style="width:25%" scope="col">{{ schemas[schema]['type'] }}</td>
+    <td>
+      <a class="badge badge-primary" href="#{{ schemas[schema]['items']['$ref']|replace('#/components/schemas/', '') }}">{{ schemas[schema]['items']['$ref']|replace('#/components/schemas/', '') }}</a>
+    </td>
+  </tr>
+  {%- endif %}
+</table>
+{% endfor %}
+{%- endif -%}

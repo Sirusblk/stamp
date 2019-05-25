@@ -1,0 +1,101 @@
+{%- for path in paths %}
+{%- for verb in paths[path] %}
+<h3>{{ verb.upper() }} {{ path }}</h3>
+<p>{{ paths[path][verb]['summary'] }}</p>
+
+
+{% set parameters = paths[path][verb]['parameters'] %}
+
+{# Check for Path & Query parameters #}
+{% set ns = namespace(has_path_params = false, has_query_params = false) %}
+
+{% for parameter in parameters %}
+  {% if parameter.in == 'path' %}
+    {% set ns.has_path_params = true %}
+  {% endif %}
+  {% if parameter.in == 'query' %}
+    {% set ns.has_query_params = true %}
+  {% endif %}
+{% endfor %}
+
+
+{# Path Parameters #}
+{% if ns.has_path_params == true %}
+<h5>Path Parameters</h5>
+<table class="table table-dark table-striped">
+  {% for parameter in parameters %}
+  <tr>
+    <td style="width:25%" scope="col">
+      {{ parameter['name'] }}
+      {% if parameter.required %}
+        <span class="badge badge-pill badge-danger">Required</span>
+      {% endif %}
+    </td>
+    <td>
+      {{ parameter.schema.type }}
+      <br>{{ parameter.description }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+
+{# Query Parameters #}
+{% if ns.has_query_params == true %}
+<h5>Query Parameters</h5>
+<table class="table table-dark table-striped">
+  {% for parameter in parameters %}
+  <tr>
+    <td style="width:25%" scope="col">
+      {{ parameter['name'] }}
+      {% if parameter.required %}
+        <span class="badge badge-pill badge-danger">Required</span>
+      {% endif %}
+    </td>
+    <td>
+      {{ parameter.schema.type }}
+      {% if parameter.schema.format %}
+        <code>(${{ parameter.schema.format }})</code>
+      {% endif %}
+      <br>{{ parameter.description }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+
+{# Responses #}
+{% set responses = paths[path][verb]['responses'] %}
+{% if responses %}
+  <h5>Responses</h5>
+  <table class="table">
+  {% for response in responses %}
+    {% if response != 'default' %}
+    {% if response|int < 300 %}
+      <tr class="table-success">
+    {% else %}
+      <tr class="table-danger">
+    {% endif %}
+        <td style="width:25%" scope="col">
+          {{ response }}
+        </td>
+        <td>
+          {{ responses[response]['description'] }}
+        </td>
+        <td style="width:25%">
+          {% if responses[response]['content'] %}
+            {% if responses[response]['content']['application/json'] %}
+            <a class="badge badge-primary" href="#{{ responses[response]['content']['application/json']['schema']['$ref']|replace('#/components/schemas/', '') }}">{{ responses[response]['content']['application/json']['schema']['$ref']|replace('#/components/schemas/', '') }}</a>
+            {% endif %}
+          {% endif %}
+        </td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+  </table>
+{% endif %}
+
+{% endfor -%}
+{% endfor %}

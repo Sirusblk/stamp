@@ -72,27 +72,27 @@
   <h5>Responses</h5>
   <table class="table">
   {% for response in responses %}
-    {% if response != 'default' %}
-    {% if response|int < 300 %}
-      <tr class="table-success">
-    {% else %}
-      <tr class="table-danger">
-    {% endif %}
-        <td style="width:25%" scope="col">
-          {{ response }}
-        </td>
-        <td>
-          {{ responses[response]['description'] }}
-        </td>
-        <td style="width:25%">
-          {% if responses[response]['content'] %}
-            {% if responses[response]['content']['application/json'] %}
-            <a class="badge badge-primary" href="#{{ responses[response]['content']['application/json']['schema']['$ref']|replace('#/components/schemas/', '') }}">{{ responses[response]['content']['application/json']['schema']['$ref']|replace('#/components/schemas/', '') }}</a>
-            {% endif %}
+  {% if response == 'default' %}
+    <tr class="table-danger">
+  {% elif response|int < 300 %}
+    <tr class="table-success">
+  {% else %}
+    <tr class="table-danger">
+  {% endif %}
+      <td style="width:25%" scope="col">
+        {{ response|title }}
+      </td>
+      <td>
+        {{ responses[response]['description'] }}
+      </td>
+      <td style="width:25%">
+        {% if responses[response]['content'] %}
+          {% if responses[response]['content']['application/json'] %}
+          <a class="badge badge-primary" href="#{{ responses[response]['content']['application/json']['schema']['$ref']|replace('#/components/schemas/', '') }}">{{ responses[response]['content']['application/json']['schema']['$ref']|replace('#/components/schemas/', '') }}</a>
           {% endif %}
-        </td>
-      </tr>
-    {% endif %}
+        {% endif %}
+      </td>
+    </tr>
   {% endfor %}
   </table>
 {% endif %}
